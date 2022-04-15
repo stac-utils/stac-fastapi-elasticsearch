@@ -47,7 +47,18 @@ async def create_item(request):
     item = json.loads(bytearray(request["body"]).decode("utf-8"))
     Request.base_url = "localhost:8080"
 
-    await client.create_item(item=item, request=Request)
+    item = await client.create_item(item=item, request=Request)
+    return json.dumps(item)
+
+@app.get("/collections/:collection_id/items/:item_id")
+async def get_item(request):
+    client = CoreClient()
+    Request.base_url = "localhost:8080"
+    item = await client.get_item(
+        item_id=request["params"]["item_id"], 
+        collection_id=request["params"]["collection_id"], 
+        request=Request
+    )
     return json.dumps(item)
 
 app.start(port=8080, url="0.0.0.0")
