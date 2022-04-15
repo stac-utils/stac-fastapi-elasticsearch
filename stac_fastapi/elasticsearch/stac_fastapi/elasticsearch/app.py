@@ -13,6 +13,8 @@ async def root(requests):
 
 class Request():
     base_url = str
+    method = None
+    url = None
 
 @app.post("/collections")
 async def create_collection(request):
@@ -72,5 +74,18 @@ async def delete_item(request):
         collection_id=request["params"]["collection_id"],
         item_id=request["params"]["item_id"]
     )
+
+@app.get("/collections/:collection_id/items")
+async def get_item_collection(request):
+    client = CoreClient()
+    Request.base_url = "localhost:8080"
+    Request.method = None
+    Request.url = "localhost:8080"
+    items = await client.item_collection(
+        collection_id=request["params"]["collection_id"], 
+        request=Request
+    )
+    return json.dumps(items)
+
 
 app.start(port=8080, url="0.0.0.0")
