@@ -8,7 +8,7 @@ from stac_fastapi.elasticsearch.indexes import IndexesClient
 app = Robyn(__file__)
 
 @app.get("/")
-async def h(requests):
+async def root(requests):
     return "Hello, world!"
 
 class Request():
@@ -39,5 +39,15 @@ async def get_all_collections(requests):
     return json.dumps({
         "collections": collections
     })
+
+@app.post("/collections/:collection_id/items")
+async def create_item(request):
+    await IndexesClient().create_indexes()
+    client = TransactionsClient()
+    item = json.loads(bytearray(request["body"]).decode("utf-8"))
+    Request.base_url = "localhost:8080"
+
+    await client.create_item(item=item, request=Request)
+    return json.dumps(item)
 
 app.start(port=8080, url="0.0.0.0")
