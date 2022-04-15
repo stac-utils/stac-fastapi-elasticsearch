@@ -40,9 +40,13 @@ async def get_all_collections(requests):
         "collections": collections
     })
 
+@app.delete("/collections/:collection_id")
+async def delete_collection(request):   
+    client = TransactionsClient()
+    await client.delete_collection(collection_id=request["params"]["collection_id"])
+
 @app.post("/collections/:collection_id/items")
 async def create_item(request):
-    await IndexesClient().create_indexes()
     client = TransactionsClient()
     item = json.loads(bytearray(request["body"]).decode("utf-8"))
     Request.base_url = "localhost:8080"
