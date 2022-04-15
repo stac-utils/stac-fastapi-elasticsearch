@@ -65,4 +65,12 @@ async def get_item(request):
     )
     return json.dumps(item)
 
+@app.delete("/collections/:collection_id/items/:item_id")
+async def delete_item(request):   
+    client = TransactionsClient()
+    await client.delete_item(
+        collection_id=request["params"]["collection_id"],
+        item_id=request["params"]["item_id"]
+    )
+
 app.start(port=8080, url="0.0.0.0")
