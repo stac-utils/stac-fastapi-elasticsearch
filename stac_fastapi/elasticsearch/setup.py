@@ -20,6 +20,7 @@ install_requires = [
     "uvicorn",
     "overrides",
     "starlette",
+    "Robyn",
 ]
 
 extra_reqs = {
