@@ -1,5 +1,6 @@
 from robyn import Robyn, jsonify
 import json
+import stac_pydantic.api
 from stac_fastapi.elasticsearch.core import (
     CoreClient,
     TransactionsClient,
@@ -24,7 +25,6 @@ async def create_collection(request):
     Request.base_url = "localhost:8080"
 
     await client.create_collection(collection=collection, request=Request)
-    # return json.dumps(collection)
     return jsonify(collection)
 
 @app.get("/collections/:collection_id")
@@ -88,15 +88,20 @@ async def get_item_collection(request):
     )
     return jsonify(items)
 
-# @app.post("/search")
-# async def post_search(request):
-#     client = CoreClient()
-#     search_body = json.loads(bytearray(request["body"]).decode("utf-8"))
-#     Request.base_url = "localhost:8080"
-#     items = await client.post_search(
-#         search_request=search_body,
-#         request=Request
-#     )
-#     return jsonify(items)
+@app.post("/search")
+async def post_search(request):
+    client = CoreClient()
+    search_body = json.loads(bytearray(request["body"]).decode("utf-8"))
+    search = stac_pydantic.api.Search(
+        collections=search_body["collections"] if "collections" in search_body else [],
+        ids=search_body["ids"] if "ids" in search_body else [],
+        intersects=search_body["intersects"] if "intersects" in search_body else None
+    )
+    Request.base_url = "localhost:8080"
+    items = await client.post_search(
+        search_request=search,
+        request=Request
+    )
+    return jsonify(items)
 
 app.start(port=8080, url="0.0.0.0")
