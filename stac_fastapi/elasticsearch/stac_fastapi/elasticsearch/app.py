@@ -99,6 +99,7 @@ async def post_search(request):
         intersects=search_body["intersects"] if "intersects" in search_body else None,
         datetime=search_body["datetime"] if "datetime" in search_body else "",
         limit=search_body["limit"] if "limit" in search_body else 10,
+        query=search_body["query"] if "query" in search_body else None,
     )
     Request.base_url = "localhost:8080"
     items = await client.post_search(
