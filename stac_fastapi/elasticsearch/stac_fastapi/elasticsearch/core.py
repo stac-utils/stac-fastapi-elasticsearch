@@ -274,7 +274,8 @@ class CoreClient(AsyncBaseCoreClient):
         items, maybe_count, next_token = await self.database.execute_search(
             search=search,
             limit=limit,
-            token=search_request.token,  # type: ignore
+            # token=search_request.token,  # type: ignore
+            token=kwargs["token"] if "token" in kwargs else None,
             sort=sort,
         )
 
