@@ -95,6 +95,7 @@ async def post_search(request):
     search = stac_pydantic.api.Search(
         collections=search_body["collections"] if "collections" in search_body else [],
         ids=search_body["ids"] if "ids" in search_body else [],
+        bbox=search_body["bbox"] if "bbox" in search_body else None,
         intersects=search_body["intersects"] if "intersects" in search_body else None
     )
     Request.base_url = "localhost:8080"
