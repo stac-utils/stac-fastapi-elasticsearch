@@ -96,7 +96,9 @@ async def post_search(request):
         collections=search_body["collections"] if "collections" in search_body else [],
         ids=search_body["ids"] if "ids" in search_body else [],
         bbox=search_body["bbox"] if "bbox" in search_body else None,
-        intersects=search_body["intersects"] if "intersects" in search_body else None
+        intersects=search_body["intersects"] if "intersects" in search_body else None,
+        datetime=search_body["datetime"] if "datetime" in search_body else "",
+        limit=search_body["limit"] if "limit" in search_body else 10,
     )
     Request.base_url = "localhost:8080"
     items = await client.post_search(
