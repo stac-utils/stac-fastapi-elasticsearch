@@ -146,12 +146,12 @@ new collection name, run the following Elasticsearch Update By Query command, su
 into the term filter and the new collection name into the script parameter:
 
 ```
-curl -X "POST" "http://localhost:9200/items_my-collection-copy/_update_by_query" \
+curl -X "POST" "http://localhost:9200/items_my-collection-copy/_update_by_query?wait_for_completion=false&conflicts=proceed" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
-    "query": {
-        "match_all": {}
-},
+  "query": {
+    "match_all": {}
+  },
   "script": {
     "lang": "painless",
     "params": {
